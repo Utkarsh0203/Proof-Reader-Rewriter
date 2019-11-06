@@ -1,0 +1,36 @@
+body{
+	background-color:#f4f4f4;
+	margin:0;
+}
+
+
+.container{
+  width:100%;
+  /*margin:auto;*/
+  overflow:hidden;
+}
+
+#TextDiv {
+    width: 100%;
+    height: 40%;
+    padding: 10px;
+    background-color: #444;
+    color: white;
+    font-size: 30px;
+    font-family: monospace;
+}
+
+#main-header{
+  background-color:coral;
+  color:#fff;
+  text-align: center;
+
+}
+
+.SpanClass{
+	color:white;
+}
+  
+.SpellClass{
+    color: orange;
+}
