@@ -3,7 +3,7 @@ from django.views import generic
 from nltk.corpus import wordnet
 from django.http import JsonResponse
 import json
-
+from . import spellchecker	
 
 # Create your views here.
 
@@ -22,11 +22,7 @@ def processArray(request):
 
     words = process_arr.split(' ')
 
-    print(process_arr[0])
+    suggest = spellchecker.suggestions(words)
+    print(suggest)
     
-    l = {"1":1,"2":2,"3":3}
-    m = {"4":4,"5":5,"6":6}
-    n = {"7":7,"8":8,"9":9}
-    s = [l,m,n]
-    sj = json.dumps(s)
-    return JsonResponse({"spell":s}, safe=False)
+    return JsonResponse({"spell":suggest}, safe=False)

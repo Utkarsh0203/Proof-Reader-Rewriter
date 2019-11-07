@@ -1,6 +1,5 @@
 var TextDiv = document.getElementById("TextDiv");
 var SuggestDiv = document.getElementById("SuggestDiv");
-var TextArea = document.getElementById("TextArea");
 var URL = "/send";
 TextDiv.addEventListener("keypress", onkeypress);
 // TextDiv.addEventListener("input", oninput);
@@ -9,7 +8,26 @@ TextDiv.addEventListener("keypress", onkeypress);
 // space = 32, ! = 33, 1 = 49, ? = 63, . = 46
 var processed = 0;
 var spell_matrix = [];
-var oldHTML = "";
+// var oldHTML = "";
+
+$('#TextDiv').click(function(e){
+    var wordSpan = document.elementFromPoint(e.clientX, e.clientY);
+    console.log(wordSpan);
+    if(wordSpan.className=="SpellClass"){
+        spellID = wordSpan.id.substring(1, wordSpan.id.length);
+        var newsuggest;
+        var suggest_html = "<ul class='SuggestList'>";
+        for(newsuggest in spell_matrix[spellID]){
+            console.log(spell_matrix[spellID][newsuggest]);
+            suggest_html += "<li>"+spell_matrix[spellID][newsuggest]+"</li> ";
+        }
+        suggest_html +=  "<li class='ignore'>IGNORE</li>";
+        suggest_html +=  "</ul>";
+        SuggestDiv.innerHTML = suggest_html;
+    }
+
+})
+
 function onkeypress(e){
     console.log(e.keyCode);
     // console.log(e.data);
@@ -26,14 +44,20 @@ function onkeypress(e){
         var n = textarr.length
         if(processed < n){
 
-          var newHTML=oldHTML;
+          if(TextDiv.hasChildNodes()){
+            TextDiv.removeChild(TextDiv.lastChild);
+          }
+          if(TextDiv.hasChildNodes()){
+            TextDiv.lastChild.innerHTML += " ";
+          }
+          newHTML = TextDiv.innerHTML;
           console.log(newHTML);
 
         $.each(textarr.slice(processed, n), function(index, value){
           newHTML += "<span class='SpanClass' id='w"+(processed+index)+"' >" + value + "&nbsp;</span>";
           // newHTML += "<span class='other' id='"+index+"''>" + value + "&nbsp;</span>";
             if(processed+index==n-1){
-                newHTML = newHTML.substring(0, newHTML.length-13)+lastchar+" </span>";
+                newHTML = newHTML.substring(0, newHTML.length-13)+lastchar+"</span><span class='SpanClass'>&nbsp;</span>";
             }
         });
                 
@@ -49,7 +73,7 @@ function onkeypress(e){
         sel.addRange(range);
         $(this)[0].focus(); 
 
-        sendRequest(textarr.slice(processed, n), function(){processed=n; oldHTML=TextDiv.innerHTML;});   
+        sendRequest(textarr.slice(processed, n), function(){processed=n;});   
     }
   }
 }
@@ -101,7 +125,7 @@ function sendRequest(arr, callback){
                 icol = [];
                 var j;
                 for (j in json["spell"][i]){
-                    icol.push(j);
+                    icol.push(json["spell"][i][j]);
                 }
                 if(icol.length!=0){
                     var id = "w" + (processed+i);
