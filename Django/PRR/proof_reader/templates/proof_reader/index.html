@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<html>
+<head>
+  <title>Proof Reader Rewriter</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'proof_reader/style.css' %}" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+
+<header id="main-header">
+  <div class="container">
+    <h1>Proof Reader Rewriter</h1>
+  </div>
+</header>
+
+<div id="TextDiv" contenteditable="true" spellcheck="false">
+</div>
+
+<div id="SuggestDiv">
+</div>
+<script src="{% static 'proof_reader/my.js' %}" type="text/javascript"></script>
+
+</body>
+</html>
