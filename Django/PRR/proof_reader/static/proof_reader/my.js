@@ -6,9 +6,36 @@ TextDiv.addEventListener("keypress", onkeypress);
 // TextDiv.addEventListener("paste", onpaste);
 
 // space = 32, ! = 33, 1 = 49, ? = 63, . = 46
+// #id is for list of suggestions
+// wid is for span elements
 var processed = 0;
 var spell_matrix = [];
+var excl_or_fstop =-1;
 // var oldHTML = "";
+
+$('#SuggestDiv').click(function(e){
+    var word = document.elementFromPoint(e.clientX, e.clientY);
+    console.log(word);
+    if(word.className=="Sugg_li"){
+        // spellID = wordSpan.id.substring(1, wordSpan.id.length);
+        // var newsuggest;
+        // var suggest_html = "<ul class='SuggestList'>";
+        // for(newsuggest in spell_matrix[spellID]){
+        //     console.log(spell_matrix[spellID][newsuggest]);
+        //     suggest_html += "<li>"+spell_matrix[spellID][newsuggest]+"</li> ";
+        // }
+        // suggest_html +=  "<li class='ignore'>IGNORE</li>";
+        // suggest_html +=  "</ul>";
+        // SuggestDiv.innerHTML = suggest_html;
+        // console.log(word.id);
+        replace(word.id, word.innerHTML);
+
+    }
+    else if(word.className=="ignore"){
+        replace(word.id, "");
+    }
+
+})
 
 $('#TextDiv').click(function(e){
     var wordSpan = document.elementFromPoint(e.clientX, e.clientY);
@@ -19,20 +46,44 @@ $('#TextDiv').click(function(e){
         var suggest_html = "<ul class='SuggestList'>";
         for(newsuggest in spell_matrix[spellID]){
             console.log(spell_matrix[spellID][newsuggest]);
-            suggest_html += "<li>"+spell_matrix[spellID][newsuggest]+"</li> ";
+            suggest_html += "<li class='Sugg_li' id='#" +spellID+"'>"+spell_matrix[spellID][newsuggest]+"</li> ";
         }
-        suggest_html +=  "<li class='ignore'>IGNORE</li>";
+        suggest_html +=  "<li class='ignore' id='#" +spellID+"'>IGNORE</li>";
         suggest_html +=  "</ul>";
         SuggestDiv.innerHTML = suggest_html;
     }
 
 })
 
+function replace(word_id, replacement_string){
+    word_id = word_id.substring(1, word_id.length);
+    var old = document.getElementById("w"+word_id);
+    if(replacement_string!=""){
+
+        var lscid = TextDiv.lastChild.previousSibling.id;
+        lscid = lscid.substring(1, lscid.length);
+        console.log(lscid);
+        old.innerHTML = replacement_string;
+        if(excl_or_fstop!=-1 && word_id==lscid){
+            old.innerHTML += String.fromCharCode(excl_or_fstop);
+            excl_or_fstop = -1;
+        }
+        else{
+            old.innerHTML += " ";
+        }
+    }
+    old.className = "SpanClass";
+
+    SuggestDiv.innerHTML="";
+
+}
+
 function onkeypress(e){
     console.log(e.keyCode);
     // console.log(e.data);
 
     if(e.keyCode==33 || e.keyCode==63 || e.keyCode==46){
+        excl_or_fstop = e.keyCode;
         e.preventDefault();
         var text = $(this).text();
         var lastchar = String.fromCharCode(e.keyCode);
