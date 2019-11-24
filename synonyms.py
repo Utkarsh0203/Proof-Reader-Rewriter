@@ -1,20 +1,32 @@
 from nltk.corpus import wordnet as wn
 from nltk import word_tokenize, pos_tag
 from nltk.stem import WordNetLemmatizer 
+from pattern.en import conjugate,lemma,lemexe
+import json
+print("ok")
   
 lemmatizer = WordNetLemmatizer() 
 
 
-slang=[]#iitb slang
-references=[]#corresponding LISTS of english references
+slang=[machau,infi]#iitb slang
+references=[[talented],[infinite]]#corresponding LISTS of english references
 slang_dict=dict(zip(slang,references))#dictionary of iitb slang
 
-verb_list=['VB','VBD','VBG','VBN','VBP','VBZ']
+verb_list=["VB","VBD","VBG","VBN","VBP","VBZ"]
+stop_words=["be","is","are","do","have","why","what","was","where","who","that","here","there","how","when"]
+pattern_aliases=["inf","1sg","2sg","3sg","pl","part","p","1sgp","2sgp","3gp","ppl","ppart"]
+
+def aliasa(word):
+	base_form=lemmatizer.lemmatize(word,wn.VERB)
+	for alias in pattern_aliases:
+		if conjugate(base_form,alias)==word:
+			return alias
 
 def synonyms(word): #returns set of synonyms of the word
 	
 	synonyms=set()
 	base_form=word
+	alias="nullAlias"
 
 	if word in slang_dict:
 		for syn in slang_dict[word]:
@@ -23,33 +35,18 @@ def synonyms(word): #returns set of synonyms of the word
 
 	if is_verb(word):
 		base_form=lemmatizer.lemmatize(word,wn.VERB)
-
+		alias=aliasa(word)
 	
 	for synset in wn.synsets(base_form):
-		for syn in synset.lemma_names():					
-			synonyms.add(syn)
+		for syn in synset.lemma_names():	
+			if not alias=="nullAlias":				
+				synonyms.add(conjugate(syn,alias))
+			else:
+				synonyms.add(syn)
 	
-	return synonyms
-
-def get_trigrams(sentence,word_ind):#sentence is a list of words, returns trigrams in which the given word occurs along with its pos in trigram
-	trigrams=[]
-	
-	t=sentence[word_ind-2:word_ind+1]
-	if len(t)==3:
-		trigrams.append([a, 2])
-	t=sentence[word_ind-1:word_ind+2]
-	if len(t)==3:
-		trigrams.append([a, 1])
-	t=sentence[word_ind:word_ind+3]
-	if len(t)==3:
-		trigrams.append([a, 0])
-	
-	return trigrams
-
-#def frequency(trigrams):#finds total freq of trigrams
-
-
+	return synonyms	
 
 def is_verb(word):
 	return pos_tag([word])[0][1] in verb_list
+
 	
