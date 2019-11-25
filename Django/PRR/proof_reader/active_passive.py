@@ -19,8 +19,8 @@ def active_passive(sent): # sent is a string
 	# 1 past, 2-present, 3-future
 	# 1-simple, 2-continuous, 3-perfect
 	for sentence in pt:
-		for chunk in sentence.chunks:
-			 print(chunk.type, [(w.string, w.type) for w in chunk.words], type(chunk.words))
+		# for chunk in sentence.chunks:
+		# 	 print(chunk.type, [(w.string, w.type) for w in chunk.words], type(chunk.words))
 
 		if(sentence.chunks[0].type=='NP'):
 			for w in sentence.chunks[0].words:

@@ -21,6 +21,22 @@ body{
     font-family: monospace;
 }
 
+#passive{
+    font-size: 30px;
+
+}
+
+#active{
+    box-sizing: border-box;
+    width: 100%;
+    height: 10%;
+    padding: 10px;
+    background-color: #444;
+    color: white;
+    font-size: 30px;
+    font-family: monospace;
+}
+
 #main-header{
   background-color:coral;
   color:#fff;
@@ -35,6 +51,23 @@ body{
 .SpellClass{
     color: orange;
 }
+
+.GramClass{
+    color: green;
+}
+
+.SynClass{
+    color: purple;
+}
+
+.PuncClass{
+    color: yellow;
+}
+
+.AdjecClass{
+    color:orange;
+}
+
 
 ul{
   list-style-type:none;
