@@ -3,7 +3,7 @@ from django.views import generic
 from nltk.corpus import wordnet
 from django.http import JsonResponse
 import json
-from . import spellchecker, article_checker, punctuation, verbTense, pronouns, synonyms, active_passive, make_adj_json, adjective_order
+from . import spellchecker,  verbTense, active_passive, make_adj_json, adjective_order, article_checker, pronouns, synonyms
 import re
 
 # Create your views here.
@@ -28,16 +28,16 @@ def processArray(request):
     check = int(process_arr[len(process_arr)-1])
     process_arr = process_arr[0:-1]
     # orig.append(process_arr)
-    print(process_arr)
+    # print(process_arr)
     words = process_arr.split(' ')
 
 
-    if check==3:
-        for i in range(len(words)-1):
-            words[i] = re.findall(r'\b(\S+)\b', words[i].lower())[0]
-    else:
-        for i in range(len(words)):
-            words[i] = re.findall(r'\b(\S+)\b', words[i].lower())[0]
+    # if check==3:
+    #     for i in range(len(words)-1):
+    #         words[i] = re.findall(r'\b(\S+)\b', words[i].lower())[0]
+    # else:
+    for i in range(len(words)):
+        words[i] = re.findall(r'\b(\S+)\b', words[i].lower())[0]
 
     print("#######################################")
     # print(words)
@@ -74,6 +74,6 @@ def processArray(request):
     if check==9:
         suggest = active_passive.active_passive(process_arr)
 
-    print(suggest)
+    # print(suggest)
     
     return JsonResponse({"mat":suggest}, safe=False)

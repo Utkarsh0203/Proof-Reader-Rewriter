@@ -11,7 +11,7 @@ import string
 import threading
 
 threads = [] 
-trigram_freq={}
+trigram_freq1={}
 fourgram_freq={}
 
 lemmatizer = WordNetLemmatizer() 
@@ -22,6 +22,7 @@ trigram="who are you".split()
 
 
 def trigramFreq(trig): #trig is a list of 3 words
+	# print(trig)
 	trigram = " ".join(trig)
 	encoded_query = quote(trigram)
 	params = {'corpus': 'eng-us', 'query': encoded_query, 'topk': 3}
@@ -30,10 +31,10 @@ def trigramFreq(trig): #trig is a list of 3 words
 	response = {}
 	while True:
 		try:
-			# print("trying1")
+			print("trying1")
 			temp = requests.get('https://api.phrasefinder.io/search?' + params)
 			assert temp.status_code == 200
-			# print("freq of trigram " + trigram + " is ")
+			print("freq of trigram " + trigram + " is ")
 			response = temp.json()
 			break
 		except:
@@ -44,7 +45,7 @@ def trigramFreq(trig): #trig is a list of 3 words
 		r = response['phrases']
 		for i in r:
 			freq += i['mc']		
-	# print(freq)
+	print(freq)
 	return freq
 
 # def pattern_alias(word):
@@ -103,7 +104,7 @@ def tenseChecker(sentence,ind):#sentence is a list of words, ind = index of verb
 				temp[i]=tense
 			# print(temp)
 				t = threading.Thread(target = threadOutput, args = (temp,tense,False, ))
-				t.setDaemon(True)
+				# t.setDaemon(True)
 				t.start()
 				threads.append(t)
 
@@ -115,7 +116,7 @@ def tenseChecker(sentence,ind):#sentence is a list of words, ind = index of verb
 		return sorted_tenses_4
 
 	else:
-		# trigram_freq={}
+		# trigram_freq1={}
 		# print("THREE")
 		trigrams=getTrigrams(sentence,ind)
 	# print(trigrams)
@@ -136,17 +137,17 @@ def tenseChecker(sentence,ind):#sentence is a list of words, ind = index of verb
 		for t in threads:
 			t.join()
 
-		sorted_tenses = sorted(trigram_freq.items(), key = lambda x:x[1], reverse=True)
+		sorted_tenses = sorted(trigram_freq1.items(), key = lambda x:x[1], reverse=True)
 		# print(sorted_tenses)
 		return sorted_tenses
 	
 def threadOutput(tri,syn,tof):#tof=> three not 4
 	if tof:
-		if syn in trigram_freq.keys():
-					trigram_freq[syn]+=trigramFreq(tri)
+		if syn in trigram_freq1.keys():
+					trigram_freq1[syn]+=trigramFreq(tri)
 				# print(trigramFreq(temp))
 		else:
-			trigram_freq[syn]=trigramFreq(tri)
+			trigram_freq1[syn]=trigramFreq(tri)
 	else:
 		if syn in fourgram_freq.keys():
 					fourgram_freq[syn]+=trigramFreq(tri)
@@ -158,7 +159,7 @@ def threadOutput(tri,syn,tof):#tof=> three not 4
 # tenseChecker(s.split(),1)
 
 def main(sentence):
-	global trigram_freq
+	global trigram_freq1
 	global fourgram_freq
 	next1 = True
 	tags=pos_tag(sentence)
@@ -172,9 +173,10 @@ def main(sentence):
 				a = [suggestion for suggestion,f in sorted(f, key = lambda x:x[1], reverse=True)]
 				if a:
 					a.remove(tags[i][0])
-				out[i]=a[:4]
+					out[i]=a[:4]
+				
 				threads = []
-				trigram_freq = {}
+				trigram_freq1 = {}
 				fourgram_freq = {}
 
 	for i in range(len(tags)):
@@ -185,9 +187,10 @@ def main(sentence):
 				a = [suggestion for suggestion,f in sorted(f, key = lambda x:x[1], reverse=True)]
 				if a:
 					a.remove(tags[i][0])
-				out[i]=a[:4]
+					out[i]=a[:4]
+				
 				threads = []
-				trigram_freq = {}
+				trigram_freq1 = {}
 				fourgram_freq = {}
 	
 			
@@ -202,7 +205,7 @@ def main(sentence):
 #         data.append(json.loads(line))
 # data = data[0]
 
-# def trigram_freq(words):
+# def trigram_freq1(words):
 # 	trigram = words[0] + ' ' + words[1] + ' ' + words[2]
 # 	try:
 # 		return data[trigram]
