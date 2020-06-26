@@ -30,11 +30,17 @@ For checking for grammartical errors, the tool only checks for errors with artic
 <img src="data/sp1.png" width="720">
 <img src="data/sp2.png" width="720">
 
+---
+
 ### Grammar Check
 <img src="data/gr1.png" width="720">
 <img src="data/gr2.png" width="720">
 <img src="data/gr3.png" width="720">
 
+---
+
 ### Active-Passive Conversion
 <img src="data/acps1.png" width="720">
 <img src="data/acps2.png" width="720">
+
+---
