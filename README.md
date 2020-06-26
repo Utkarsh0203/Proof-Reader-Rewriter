@@ -25,6 +25,9 @@ Spellings in the input sentences are first checked with a dictionary of 50,000 w
 ### Grammar Check
 For checking for grammartical errors, the tool only checks for errors with articles, tenses, auxiliary verbs and demonstrative and interrogative pronouns. For checking these errors, libraries like nltk and pattern have been used to provide appropriate POS tags and relevant contextual information that have been used in N-gram analysis.
 
+### Active-Passive Conversion
+First a parse tree is formed from the sentence using POS tagging and then parts of sentence are identified from the tree. After that, the tree is inverted and the past participle of the main verb is added in the middle and then grammar check is run to form the final sentence.
+
 ## Examples
 ### Spell Check
 <img src="data/sp1.png" width="720">
